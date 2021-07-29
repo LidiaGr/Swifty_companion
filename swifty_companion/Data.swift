@@ -16,6 +16,7 @@ struct User: Decodable {
     var image_url: String
     var cursus_users: [Cursus]
     var projects_users: [Project]
+    var campus: [Campus]
 }
 
 struct Cursus: Decodable {
@@ -35,4 +36,8 @@ struct Project: Decodable {
 
 struct ProjectDetails: Decodable {
     var name: String
+}
+
+struct Campus: Decodable {
+    var name : String
 }

@@ -10,8 +10,8 @@ import UIKit
 
 class ApiConnection {
     private var token = String()
-    private let UID = "be7059d0939c5aa48803d0c69f6372a85794ac39ab90814f338766f9e25c4f4a"
-    private let SECRET = "27d4796f7fc88b986b6d0052a13560d3719950157344d21456a5bd5016a387ea"
+    private let UID = "1dcd2fe1f58d430c8fc484b4ca8900cbcf3c7843c9ce879095592577e7973979"
+    private let SECRET = "3ca74e73ede4504afa8ca14f54cb57823e16dfc397141c6978c7f1cb1387add7"
     weak var delegate : APIIntra42Delegate?
     
     init(apiDelegate: APIIntra42Delegate?) {
