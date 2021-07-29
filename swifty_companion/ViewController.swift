@@ -11,20 +11,21 @@ class ViewController: UIViewController {
     var apiConnection : ApiConnection?
     
     let button = UIButton()
-    let textField = UITextField()
+    let textField = TextField()
+    let logo = UIImageView(image: UIImage(named: "logo"))
     
     let stackView: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.distribution = .fill
+        stack.distribution = .fillProportionally
         stack.axis = .vertical
-        stack.spacing = 10
+        stack.spacing = 15
         return stack
     }()
     
     var spinner: UIActivityIndicatorView! = {
         let loginSpinner = UIActivityIndicatorView(style: .large)
-        loginSpinner.color = .black
+        loginSpinner.color = .white
         loginSpinner.translatesAutoresizingMaskIntoConstraints = false
         loginSpinner.hidesWhenStopped = true
         return loginSpinner
@@ -35,12 +36,21 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         
         self.apiConnection = ApiConnection(apiDelegate: self)
-        navigationItem.title = "Intra 42"
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         setupStackView()
         setupTextField()
+        setupLogo()
         setupButton()
         setupSpinner()
+    }
+    
+    func setupLogo() {
+        view.addSubview(logo)
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        
+        logo.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -(view.frame.height / 4)).isActive = true
+        logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     func setupStackView() {
@@ -51,9 +61,14 @@ class ViewController: UIViewController {
     }
     
     func setupTextField() {
-        textField.placeholder = "Enter username"
-        textField.textAlignment = .center
-        textField.font = UIFont.systemFont(ofSize: 25)
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter username",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)]);
+        textField.textAlignment = .left
+        textField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        textField.layer.borderColor = UIColor(hexString: "#00babc").cgColor
+        textField.layer.borderWidth = 1
+        textField.layer.cornerRadius = 5
+        textField.textColor = UIColor.white
         textField.borderStyle = .roundedRect
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.keyboardType = UIKeyboardType.default
@@ -62,18 +77,20 @@ class ViewController: UIViewController {
         textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         textField.delegate = self
         
+        textField.addTarget(self, action: #selector(buttonPressed(_:)), for: .editingDidEndOnExit)
+        
         stackView.addArrangedSubview(textField)
     }
     
     func setupSpinner() {
         view.addSubview(spinner)
-        spinner.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10).isActive = true
+        spinner.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 20).isActive = true
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     func setupButton() {
         button.setTitle("Search", for: .normal)
-        button.backgroundColor = UIColor.systemGray
+        button.backgroundColor = UIColor(hexString: "#00babc")
         button.setTitleColor(UIColor.white, for: .normal)
         button.layer.cornerRadius = 5
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
