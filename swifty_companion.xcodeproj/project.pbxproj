@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		027D8D7A2684BF8F003B54BF /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027D8D792684BF8F003B54BF /* CustomCell.swift */; };
+		026DBD0D26B1D316002F2D14 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026DBD0C26B1D316002F2D14 /* ProfileViewController.swift */; };
+		02A693B526B2E3F200CD4DF8 /* ApiConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A693B426B2E3F200CD4DF8 /* ApiConnection.swift */; };
 		02F10AD2268362C900E38018 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F10AD1268362C900E38018 /* AppDelegate.swift */; };
 		02F10AD4268362C900E38018 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F10AD3268362C900E38018 /* SceneDelegate.swift */; };
 		02F10AD6268362C900E38018 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F10AD5268362C900E38018 /* ViewController.swift */; };
@@ -15,11 +16,11 @@
 		02F10ADE268362CA00E38018 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02F10ADC268362CA00E38018 /* LaunchScreen.storyboard */; };
 		02F10AE6268364FB00E38018 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F10AE5268364FB00E38018 /* Data.swift */; };
 		02F10AE82683685B00E38018 /* APIIntra42Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F10AE72683685B00E38018 /* APIIntra42Delegate.swift */; };
-		02F10AEA2683693D00E38018 /* APIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F10AE92683693D00E38018 /* APIController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		027D8D792684BF8F003B54BF /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		026DBD0C26B1D316002F2D14 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		02A693B426B2E3F200CD4DF8 /* ApiConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiConnection.swift; sourceTree = "<group>"; };
 		02F10ACE268362C900E38018 /* swifty_companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = swifty_companion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F10AD1268362C900E38018 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02F10AD3268362C900E38018 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -29,7 +30,6 @@
 		02F10ADF268362CA00E38018 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02F10AE5268364FB00E38018 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		02F10AE72683685B00E38018 /* APIIntra42Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIIntra42Delegate.swift; sourceTree = "<group>"; };
-		02F10AE92683693D00E38018 /* APIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,8 +70,8 @@
 				02F10ADF268362CA00E38018 /* Info.plist */,
 				02F10AE5268364FB00E38018 /* Data.swift */,
 				02F10AE72683685B00E38018 /* APIIntra42Delegate.swift */,
-				02F10AE92683693D00E38018 /* APIController.swift */,
-				027D8D792684BF8F003B54BF /* CustomCell.swift */,
+				026DBD0C26B1D316002F2D14 /* ProfileViewController.swift */,
+				02A693B426B2E3F200CD4DF8 /* ApiConnection.swift */,
 			);
 			path = swifty_companion;
 			sourceTree = "<group>";
@@ -147,10 +147,10 @@
 			files = (
 				02F10AD6268362C900E38018 /* ViewController.swift in Sources */,
 				02F10AD2268362C900E38018 /* AppDelegate.swift in Sources */,
-				02F10AEA2683693D00E38018 /* APIController.swift in Sources */,
+				02A693B526B2E3F200CD4DF8 /* ApiConnection.swift in Sources */,
 				02F10AD4268362C900E38018 /* SceneDelegate.swift in Sources */,
 				02F10AE82683685B00E38018 /* APIIntra42Delegate.swift in Sources */,
-				027D8D7A2684BF8F003B54BF /* CustomCell.swift in Sources */,
+				026DBD0D26B1D316002F2D14 /* ProfileViewController.swift in Sources */,
 				02F10AE6268364FB00E38018 /* Data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

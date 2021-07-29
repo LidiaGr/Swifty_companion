@@ -8,17 +8,18 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var apiController: APIController?
-//    var visitsArr: [Visit] = []
-//    var tableView = UITableView()
+    var apiConnection : ApiConnection?
     
-    var search: UISearchController = {
-        let search = UISearchController(searchResultsController: nil)
-        search.obscuresBackgroundDuringPresentation = false
-        search.hidesNavigationBarDuringPresentation = false
-        search.searchBar.placeholder = "Search a user"
-        search.searchBar.returnKeyType = .done
-        return search
+    let button = UIButton()
+    let textField = UITextField()
+    
+    let stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fill
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
     }()
     
     var spinner: UIActivityIndicatorView! = {
@@ -29,85 +30,69 @@ class ViewController: UIViewController {
         return loginSpinner
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        self.title = "Trying to connect to the server..."
+        view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         
+        self.apiConnection = ApiConnection(apiDelegate: self)
+        navigationItem.title = "Intra 42"
+        
+        setupStackView()
+        setupTextField()
+        setupButton()
+        setupSpinner()
+    }
+    
+    func setupStackView() {
+        view.addSubview(stackView)
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+    }
+    
+    func setupTextField() {
+        textField.placeholder = "Enter username"
+        textField.textAlignment = .center
+        textField.font = UIFont.systemFont(ofSize: 25)
+        textField.borderStyle = .roundedRect
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.keyboardType = UIKeyboardType.default
+        textField.returnKeyType = UIReturnKeyType.done
+        textField.clearButtonMode = UITextField.ViewMode.whileEditing
+        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        textField.delegate = self
+        
+        stackView.addArrangedSubview(textField)
+    }
+    
+    func setupSpinner() {
         view.addSubview(spinner)
-        spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        spinner.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10).isActive = true
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    func setupButton() {
+        button.setTitle("Search", for: .normal)
+        button.backgroundColor = UIColor.systemGray
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.layer.cornerRadius = 5
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        
+        stackView.addArrangedSubview(button)
+    }
+    
+    @objc func buttonPressed(_ sender: UIButton) {
         spinner.startAnimating()
+        apiConnection?.getTokenAndMakeRequest(username: textField.text?.lowercased() ?? "")
     }
-    
-    func updateUI() {
-        DispatchQueue.main.async { [self] in
-            spinner.stopAnimating()
-            self.title = "Intra 42"
-            self.apiController = APIController(apiDelegate: self, apiToken: Token!)
-            
-            search.searchBar.delegate = self
-            search.delegate = self
-            search.searchResultsUpdater = self
-            navigationItem.searchController = search
-            navigationItem.hidesSearchBarWhenScrolling = false
-            
-//            view.addSubview(tableView)
-//            tableView.translatesAutoresizingMaskIntoConstraints = false
-//            tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//            tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//            tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-//            tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-//
-//            tableView.dataSource = self
-//            tableView.delegate = self
-//            tableView.register(CustomCell.self, forCellReuseIdentifier: "cell")
-            
-//            view.addSubview(spinner)
-        }
-    }
-    
 }
 
-//extension ViewController: UITableViewDataSource, UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//    }
-    
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return visitsArr.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
-//        let theVisit = visitsArr[indexPath.row]
-//        cell.dateLable.text = "\(theVisit.date)"
-//        cell.timeLable.text = "\(theVisit.begin_at) - \(theVisit.end_at)"
-//        cell.hostLable.text = "\(theVisit.host)"
-//        return cell
-//    }
-//}
-
-extension ViewController: APIIntra42Delegate {
-//    func processData(visits: [Visit]) {
-//        visitsArr = visits
-//        DispatchQueue.main.async { [weak self] in
-//            if self?.tableView.numberOfRows(inSection: 0) != 0 {
-//                self?.tableView.scrollToRow(at: IndexPath(row: 0, section: 0) , at: UITableView.ScrollPosition.top, animated: true)
-//            }
-//            self?.tableView.reloadData()
-//            self?.spinner.stopAnimating()
-//        }
-//    }
-    
-    func processData(data: [Data]){
-        
+extension ViewController : APIIntra42Delegate {
+    func processData(data: User) {
+        DispatchQueue.main.async {
+            self.spinner.stopAnimating()
+            print(data)
+        }
     }
     
     func errorOccured(error: NSError) {
@@ -118,28 +103,23 @@ extension ViewController: APIIntra42Delegate {
             }))
             self.present(alert, animated: true, completion: nil)
             self.spinner.stopAnimating()
-//            self.visitsArr = []
-//            self.tableView.reloadData()
-            self.search.searchBar.text = ""
         }
     }
 }
 
-extension ViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.spinner?.startAnimating()
-        guard let text = search.searchBar.text?.lowercased() else { return }
-        self.apiController?.findUser(username: text)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        if spinner.isAnimating {
-            self.spinner.stopAnimating()
-        }
-//        self.visitsArr = []
-//        self.tableView.reloadData()
+extension ViewController : UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // get the current text, or use an empty string if that failed
+        let currentText = textField.text ?? ""
+
+        // attempt to read the range they are trying to change, or exit if we can't
+        guard let stringRange = Range(range, in: currentText) else { return false }
+
+        // add their new text to the existing text
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+        // make sure the result is under 16 characters
+        return updatedText.count <= 16
     }
 }
+
