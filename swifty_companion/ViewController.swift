@@ -36,13 +36,17 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         
         self.apiConnection = ApiConnection(apiDelegate: self)
-        navigationController?.setNavigationBarHidden(true, animated: false)
         
         setupStackView()
         setupTextField()
         setupLogo()
         setupButton()
         setupSpinner()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     func setupLogo() {
@@ -61,8 +65,9 @@ class ViewController: UIViewController {
     }
     
     func setupTextField() {
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter username",
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)]);
+        textField
+            .attributedPlaceholder = NSAttributedString(string: "Enter username",
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)])
         textField.textAlignment = .left
         textField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         textField.layer.borderColor = UIColor(hexString: "#00babc").cgColor
@@ -77,7 +82,7 @@ class ViewController: UIViewController {
         textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         textField.delegate = self
         
-        textField.addTarget(self, action: #selector(buttonPressed(_:)), for: .editingDidEndOnExit)
+        textField.addTarget(self, action: #selector(buttonPressed), for: .editingDidEndOnExit)
         
         stackView.addArrangedSubview(textField)
     }
@@ -98,7 +103,7 @@ class ViewController: UIViewController {
         stackView.addArrangedSubview(button)
     }
     
-    @objc func buttonPressed(_ sender: UIButton) {
+    @objc func buttonPressed() {
         spinner.startAnimating()
         apiConnection?.getTokenAndMakeRequest(username: textField.text?.lowercased() ?? "")
     }
@@ -108,6 +113,8 @@ extension ViewController : APIIntra42Delegate {
     func processData(data: User) {
         DispatchQueue.main.async {
             self.spinner.stopAnimating()
+            let secondVC = ProfileViewController()
+            self.navigationController?.pushViewController(secondVC, animated: true)
             print(data)
         }
     }
@@ -136,7 +143,7 @@ extension ViewController : UITextFieldDelegate {
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
         // make sure the result is under 16 characters
-        return updatedText.count <= 16
+        return updatedText.count <= 20
     }
 }
 
