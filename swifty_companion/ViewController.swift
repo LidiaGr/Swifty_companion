@@ -113,8 +113,11 @@ extension ViewController : APIIntra42Delegate {
     func processData(data: User) {
         DispatchQueue.main.async {
             self.spinner.stopAnimating()
-            let secondVC = ProfileViewController()
+            
+            let storyboard = UIStoryboard(name: "ProfileViewController", bundle: nil)
+            let secondVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController")
             self.navigationController?.pushViewController(secondVC, animated: true)
+            
             print(data)
         }
     }

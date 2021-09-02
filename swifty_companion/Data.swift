@@ -10,9 +10,11 @@ import UIKit
 struct User: Decodable {
     var id:     Int
     var login:  String
+    var displayname: String
     var url:    String
     var location: String?
     var wallet: Int
+    var correction_point: Int
     var image_url: String
     var cursus_users: [Cursus]
     var projects_users: [Project]

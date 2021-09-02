@@ -8,20 +8,27 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-    let login = UILabel()
-    let level = UILabel()
-    let wallet = UILabel()
-    let location = UILabel()
-    let avatar = UIImage()
+    @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var avatar: UIImageView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var wallet: UILabel!
+    @IBOutlet private weak var evalPoints: UILabel!
+    @IBOutlet private weak var scrollView: UIScrollView!
     
-    let stackView: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.distribution = .fillEqually
-        stack.axis = .vertical
-        stack.spacing = 10
-        return stack
-    }()
+//    let login = UILabel()
+//    let level = UILabel()
+//    let wallet = UILabel()
+//    let location = UILabel()
+    let avatarImage = UIImage(named: "logo")
+    
+//    let stackView: UIStackView = {
+//        let stack = UIStackView()
+//        stack.translatesAutoresizingMaskIntoConstraints = false
+//        stack.distribution = .fillEqually
+//        stack.axis = .vertical
+//        stack.spacing = 10
+//        return stack
+//    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +38,11 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.tintColor = UIColor(hexString: "#009294")
         
         view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+        
+        avatar.image = avatarImage
     }
-    
+}
 
+extension ProfileViewController {
+    
 }
