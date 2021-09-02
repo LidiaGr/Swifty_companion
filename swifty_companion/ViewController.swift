@@ -115,7 +115,8 @@ extension ViewController : APIIntra42Delegate {
             self.spinner.stopAnimating()
             
             let storyboard = UIStoryboard(name: "ProfileViewController", bundle: nil)
-            let secondVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController")
+            let secondVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
+            secondVC.user = data
             self.navigationController?.pushViewController(secondVC, animated: true)
             
             print(data)
