@@ -9,10 +9,17 @@ import UIKit
 
 final class CustomCell: UITableViewCell {
   // MARK: IBOutlets
-  @IBOutlet private weak var project: UILabel!
+  @IBOutlet private weak var projectName: UILabel!
   @IBOutlet private weak var finalMark: UILabel!
   
   // MARK: Private Usage Properties
+  enum Status {
+    case success
+    case failure
+  }
+  
+  private var stat = Status.success
+  private var color = UIColor()
   
   // MARK: Overriden properties
   
@@ -28,19 +35,33 @@ final class CustomCell: UITableViewCell {
 
   func resetToEmptyState() {}
   
-  func setProjectValue(value: String) {
-    project.text = value
+  func setupStatus(status: String) {
+    stat = status == "finished" ? Status.success : Status.failure
+    
+    switch stat {
+    case .success: color = UIColor(hexString: "#5cb85c")
+    case .failure: color = UIColor(hexString: "#D8636F")
+    }
   }
   
-  func setFinalMark(value: Int?) {
+  func setupProjectName(value: String) {
+    projectName.text = value.lowercased()
+    projectName.textColor = color
+  }
+  
+  func setupFinalMark(value: Int?) {
     guard let mark = value else { return }
-      finalMark.text = String(mark)
+    switch stat {
+    case .success: finalMark.text = "✓ " + String(mark)
+    case .failure: finalMark.text = "✗ " + String(mark)
+    }
+    finalMark.textColor = color
   }
   
   // MARK: Private actions
   
   private func initialSetup() {
-    project.text = ""
+    projectName.text = ""
     finalMark.text = ""
   }
   

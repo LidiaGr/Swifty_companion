@@ -25,6 +25,9 @@ class ProfileViewController: UIViewController {
   @IBOutlet private weak var projectsTable: UITableView!
   @IBOutlet private weak var skillsTable: UITableView!
   
+  private let identifier = "CustomCell"
+  private var projectsInLastCursus = [Project]()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -64,21 +67,42 @@ extension ProfileViewController {
   func setupProjectsTable() {
     projectsTable.delegate = self
     projectsTable.dataSource = self
-    projectsTable.register(CustomCell.self, forCellReuseIdentifier: "projectCell")
+    projectsTable.register(UINib(nibName: identifier, bundle: nil), forCellReuseIdentifier: identifier)
+    
+    projectsTable.backgroundColor = UIColor(hexString: "#202026").withAlphaComponent(0.85)
+    projectsTable.separatorColor = UIColor(hexString: "#01A2A4")
+    projectsTable.separatorStyle = .singleLine
+    projectsTable.rowHeight = 44
+    
+    projectsInLastCursusSetup()
   }
 }
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+  
+  func projectsInLastCursusSetup() {
+    let id = user.projects_users[0].cursus_ids
+    for project in user.projects_users {
+      if project.final_mark != nil && project.cursus_ids == id {
+        projectsInLastCursus.append(project)
+      }
+    }
+  }
+  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return user.projects_users.count
+    return projectsInLastCursus.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "projectCell", for: indexPath) as! CustomCell
-    cell.awakeFromNib()
-    let theVisit = user.projects_users[indexPath.row]
-    cell.setProjectValue(value: theVisit.project.name)
-    cell.setFinalMark(value: theVisit.final_mark)
+    let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! CustomCell
+    let theProject = projectsInLastCursus[indexPath.row]
+    cell.setupStatus(status: theProject.status)
+    cell.setupFinalMark(value: theProject.final_mark)
+    cell.setupProjectName(value: theProject.project.name)
     return cell
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    cell.backgroundColor = UIColor.clear
   }
 }

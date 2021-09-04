@@ -34,6 +34,8 @@ struct Skill: Decodable {
 struct Project: Decodable {
     var final_mark: Int?
     var project: ProjectDetails
+    var cursus_ids: [Int]
+    var status: String
 }
 
 struct ProjectDetails: Decodable {
