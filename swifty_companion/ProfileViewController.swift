@@ -22,6 +22,9 @@ class ProfileViewController: UIViewController {
   @IBOutlet private weak var location: UILabel!
   @IBOutlet private weak var campus: UILabel!
   
+  @IBOutlet private weak var projectsTable: UITableView!
+  @IBOutlet private weak var skillsTable: UITableView!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -31,12 +34,13 @@ class ProfileViewController: UIViewController {
     
     view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
     
-    displayData()
+    displayProfileData()
+    setupProjectsTable()
   }
 }
 
 extension ProfileViewController {
-  func displayData() {
+  func displayProfileData() {
     avatar.load(url: URL(string: user.image_url)!)
     avatar.layer.cornerRadius = avatar.frame.size.width / 2
     
@@ -56,16 +60,25 @@ extension ProfileViewController {
   }
 }
 
-extension UIImageView {
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
-        }
-    }
+extension ProfileViewController {
+  func setupProjectsTable() {
+    projectsTable.delegate = self
+    projectsTable.dataSource = self
+    projectsTable.register(CustomCell.self, forCellReuseIdentifier: "projectCell")
+  }
+}
+
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return user.projects_users.count
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "projectCell", for: indexPath) as! CustomCell
+    cell.awakeFromNib()
+    let theVisit = user.projects_users[indexPath.row]
+    cell.setProjectValue(value: theVisit.project.name)
+    cell.setFinalMark(value: theVisit.final_mark)
+    return cell
+  }
 }
