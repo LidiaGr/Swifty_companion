@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CustomCell: UITableViewCell {
+final class CustomProjectCell: UITableViewCell {
   // MARK: IBOutlets
   @IBOutlet private weak var projectName: UILabel!
   @IBOutlet private weak var finalMark: UILabel!
@@ -64,6 +64,4 @@ final class CustomCell: UITableViewCell {
     projectName.text = ""
     finalMark.text = ""
   }
-  
-  
 }

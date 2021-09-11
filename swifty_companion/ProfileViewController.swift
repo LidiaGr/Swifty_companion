@@ -25,8 +25,10 @@ class ProfileViewController: UIViewController {
   @IBOutlet private weak var projectsTable: UITableView!
   @IBOutlet private weak var skillsTable: UITableView!
   
-  private let identifier = "CustomCell"
+  private let identifierProject = "CustomProjectCell"
   private var projectsInLastCursus = [Project]()
+	
+  private let identifierSkill = "CustomSkillCell"
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -39,6 +41,7 @@ class ProfileViewController: UIViewController {
     
     displayProfileData()
     setupProjectsTable()
+	setupSkillsTable()
   }
 }
 
@@ -67,7 +70,7 @@ extension ProfileViewController {
   func setupProjectsTable() {
     projectsTable.delegate = self
     projectsTable.dataSource = self
-    projectsTable.register(UINib(nibName: identifier, bundle: nil), forCellReuseIdentifier: identifier)
+    projectsTable.register(UINib(nibName: identifierProject, bundle: nil), forCellReuseIdentifier: identifierProject)
     
     projectsTable.backgroundColor = UIColor(hexString: "#202026").withAlphaComponent(0.85)
     projectsTable.separatorColor = UIColor(hexString: "#01A2A4")
@@ -76,6 +79,17 @@ extension ProfileViewController {
     
     projectsInLastCursusSetup()
   }
+	
+	func setupSkillsTable() {
+		skillsTable.delegate = self
+		skillsTable.dataSource = self
+		skillsTable.register(UINib(nibName: identifierSkill, bundle: nil), forCellReuseIdentifier: identifierSkill)
+		
+		skillsTable.backgroundColor = UIColor(hexString: "#202026").withAlphaComponent(0.85)
+		skillsTable.separatorColor = UIColor(hexString: "#01A2A4")
+		skillsTable.separatorStyle = .singleLine
+		skillsTable.rowHeight = 44
+	}
 }
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
@@ -90,19 +104,39 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return projectsInLastCursus.count
+	switch tableView {
+	case projectsTable:
+		return projectsInLastCursus.count
+	default:
+		let index = user.cursus_users.count - 1
+		return user.cursus_users[index].skills.count
+	}
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! CustomCell
-    let theProject = projectsInLastCursus[indexPath.row]
-    cell.setupStatus(status: theProject.status)
-    cell.setupFinalMark(value: theProject.final_mark)
-    cell.setupProjectName(value: theProject.project.name)
-    return cell
+	switch tableView {
+	case projectsTable:
+		// TODO: enable 
+		let cell = tableView.dequeueReusableCell(withIdentifier: identifierProject, for: indexPath) as! CustomProjectCell
+		let theProject = projectsInLastCursus[indexPath.row]
+		cell.setupStatus(status: theProject.status)
+		cell.setupFinalMark(value: theProject.final_mark)
+		cell.setupProjectName(value: theProject.project.name)
+		return cell
+	default:
+		let index = user.cursus_users.count - 1
+		let cell = tableView.dequeueReusableCell(withIdentifier: identifierSkill, for: indexPath) as! CustomSkillCell
+		// TODO: disable selection in .xib or just see in latest version
+		cell.selectionStyle = .none
+		let theSkill = user.cursus_users[index].skills[indexPath.row]
+		cell.setupSkillLvl(value: theSkill.level)
+		cell.setupSkillName(value: theSkill.name)
+		return cell
+	}
   }
   
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     cell.backgroundColor = UIColor.clear
   }
 }
+
