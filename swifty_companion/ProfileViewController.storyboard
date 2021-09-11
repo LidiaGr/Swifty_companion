@@ -143,6 +143,18 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AZm-KP-KdJ">
                                                 <rect key="frame" x="20" y="519" width="374" height="25"/>
                                                 <subviews>
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fLn-no-BZF">
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="25"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.72941176470000002" blue="0.73725490199999999" alpha="0.93179054510000003" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="25" id="NKi-BM-SX0"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                <integer key="value" value="5"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="level 7 - 16%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EB1-8z-jXM">
                                                         <rect key="frame" x="138.5" y="2.5" width="97" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -150,11 +162,13 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
-                                                <color key="backgroundColor" red="0.0" green="0.72941176470588232" blue="0.73725490196078436" alpha="0.93179054510000003" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" red="0.12549019610000001" green="0.12549019610000001" blue="0.14901960780000001" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="25" id="7Gx-7W-k5Y"/>
                                                     <constraint firstItem="EB1-8z-jXM" firstAttribute="centerX" secondItem="AZm-KP-KdJ" secondAttribute="centerX" id="8pU-cu-Iui"/>
                                                     <constraint firstItem="EB1-8z-jXM" firstAttribute="centerY" secondItem="AZm-KP-KdJ" secondAttribute="centerY" id="AFg-Mv-e0A"/>
+                                                    <constraint firstItem="fLn-no-BZF" firstAttribute="leading" secondItem="AZm-KP-KdJ" secondAttribute="leading" id="fjD-ah-Xfc"/>
+                                                    <constraint firstItem="fLn-no-BZF" firstAttribute="top" secondItem="AZm-KP-KdJ" secondAttribute="top" id="ulB-1o-moB"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -258,6 +272,8 @@
                         <outlet property="evalPoints" destination="VWh-pe-uKa" id="f84-8c-FJZ"/>
                         <outlet property="location" destination="kcP-tU-bup" id="PhH-Q2-GnM"/>
                         <outlet property="lvl" destination="EB1-8z-jXM" id="rU4-bn-m3t"/>
+                        <outlet property="lvlLineBack" destination="AZm-KP-KdJ" id="Emh-jX-3xc"/>
+                        <outlet property="lvlLineFront" destination="fLn-no-BZF" id="ezW-Ei-ggy"/>
                         <outlet property="nameLabel" destination="Xc1-Cq-PhF" id="ZNk-LG-eqD"/>
                         <outlet property="projectsTable" destination="Nhq-CD-dd6" id="a33-fD-V5h"/>
                         <outlet property="scrollView" destination="UJS-U0-PF7" id="S8k-Fv-Z1R"/>

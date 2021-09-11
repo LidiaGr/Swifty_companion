@@ -24,11 +24,14 @@ class ProfileViewController: UIViewController {
   
   @IBOutlet private weak var projectsTable: UITableView!
   @IBOutlet private weak var skillsTable: UITableView!
+	
+  @IBOutlet private weak var lvlLineBack: UIView!
+  @IBOutlet private weak var lvlLineFront: UIView!
   
   private let identifierProject = "CustomProjectCell"
-  private var projectsInLastCursus = [Project]()
-	
   private let identifierSkill = "CustomSkillCell"
+  private var projectsInLastCursus = [Project]()
+  private var userLvl: Double = 0.0
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -54,8 +57,9 @@ extension ProfileViewController {
     wallet.text = String(user.wallet)
     evalPoints.text = String(user.correction_point)
     var index = user.cursus_users.count - 1
-    lvl.text = "Level " + String(user.cursus_users[index].level)
-    
+	userLvl = user.cursus_users[index].level
+    lvl.text = "Level " + String(userLvl)
+	
     if user.location != nil  {
       avaliable.text = "Available"
       location.text = user.location
@@ -63,6 +67,14 @@ extension ProfileViewController {
     
     index = user.campus.count - 1
     campus.text = user.campus[index].name
+	
+	setupLvlLine()
+  }
+	
+  func setupLvlLine() {
+	let widthPercent = CGFloat(userLvl.truncatingRemainder(dividingBy: 1) * 100)
+	let width = lvlLineBack.viewWidth * widthPercent / 100
+	lvlLineFront.widthAnchor.constraint(equalToConstant: width).isActive = true
   }
 }
 
@@ -97,7 +109,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   func projectsInLastCursusSetup() {
     let id = user.projects_users[0].cursus_ids
     for project in user.projects_users {
-      if project.final_mark != nil && project.cursus_ids == id {
+		if project.final_mark != nil && project.cursus_ids == id && project.project.parent_id == nil {
         projectsInLastCursus.append(project)
       }
     }
@@ -116,9 +128,9 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 	switch tableView {
 	case projectsTable:
-		// TODO: enable 
 		let cell = tableView.dequeueReusableCell(withIdentifier: identifierProject, for: indexPath) as! CustomProjectCell
 		let theProject = projectsInLastCursus[indexPath.row]
+		// TODO: status == "in_progress" find hierarchie
 		cell.setupStatus(status: theProject.status)
 		cell.setupFinalMark(value: theProject.final_mark)
 		cell.setupProjectName(value: theProject.project.name)

@@ -36,12 +36,16 @@ struct Project: Decodable {
     var project: ProjectDetails
     var cursus_ids: [Int]
     var status: String
+	var validated: Bool?
 }
 
 struct ProjectDetails: Decodable {
+	var id: Int
     var name: String
+	var slug: String
+	var parent_id: Int?
 }
 
 struct Campus: Decodable {
-    var name : String
+    var name: String
 }

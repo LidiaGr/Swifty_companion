@@ -33,7 +33,7 @@ final class CustomSkillCell: UITableViewCell {
 	  }
 	  
 	  func setupSkillLvl(value: Double) {
-		skillLvl.text = String(value)
+		skillLvl.text = String(format: "%.2f", value)
 	  }
 	  
 	  // MARK: Private actions
