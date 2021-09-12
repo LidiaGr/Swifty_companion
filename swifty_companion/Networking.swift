@@ -36,7 +36,7 @@ class ApiConnection {
                 }
                 guard let response = response as? HTTPURLResponse,
                       (200...299).contains(response.statusCode) else {
-//                    print(response!)
+                    print(response!)
                     return
                 }
                 if let recievedData = data {
@@ -73,14 +73,14 @@ class ApiConnection {
                 }
                 guard let response = response as? HTTPURLResponse,
                       (200...299).contains(response.statusCode) else {
-//                    let code = (response as? HTTPURLResponse)?.statusCode
-//                    if code == 401 {
-//                        self.token.removeAll()
-//                        self.getTokenAndMakeRequest(username: username)
-//                    } else {
-//                        print ("Alert")
-//                        self.delegate?.errorOccured(error: NSError(domain: "https://api.intra.42.fr/v2/users/\(username)", code: code ?? 400, userInfo: ["username": "\(username)"]))
-//                    }
+                    let code = (response as? HTTPURLResponse)?.statusCode
+                    if code == 401 {
+                        self.token.removeAll()
+                        self.getTokenAndMakeRequest(username: username)
+                    } else {
+                        print ("Alert")
+                        self.delegate?.errorOccured(error: NSError(domain: "https://api.intra.42.fr/v2/users/\(username)", code: code ?? 400, userInfo: ["username": "\(username)"]))
+                    }
                     return
                 }
                 if let recievedData = data {

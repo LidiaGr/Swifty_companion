@@ -35,8 +35,9 @@ final class CustomProjectCell: UITableViewCell {
 
   func resetToEmptyState() {}
   
-  func setupStatus(status: String) {
-    stat = status == "finished" ? Status.success : Status.failure
+  func setupStatus(status: Bool?) {
+    guard let status = status else { return }
+    stat = status == true ? Status.success : Status.failure
     
     switch stat {
     case .success: color = UIColor(hexString: "#5cb85c")

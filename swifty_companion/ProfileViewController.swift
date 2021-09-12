@@ -24,7 +24,7 @@ class ProfileViewController: UIViewController {
   
   @IBOutlet private weak var projectsTable: UITableView!
   @IBOutlet private weak var skillsTable: UITableView!
-	
+  
   @IBOutlet private weak var lvlLineBack: UIView!
   @IBOutlet private weak var lvlLineFront: UIView!
   
@@ -44,7 +44,7 @@ class ProfileViewController: UIViewController {
     
     displayProfileData()
     setupProjectsTable()
-	setupSkillsTable()
+    setupSkillsTable()
   }
 }
 
@@ -57,9 +57,9 @@ extension ProfileViewController {
     wallet.text = String(user.wallet)
     evalPoints.text = String(user.correction_point)
     var index = user.cursus_users.count - 1
-	userLvl = user.cursus_users[index].level
+    userLvl = user.cursus_users[index].level
     lvl.text = "Level " + String(userLvl)
-	
+    
     if user.location != nil  {
       avaliable.text = "Available"
       location.text = user.location
@@ -67,14 +67,15 @@ extension ProfileViewController {
     
     index = user.campus.count - 1
     campus.text = user.campus[index].name
-	
-	setupLvlLine()
+    
+    setupLvlLine()
   }
-	
+  
   func setupLvlLine() {
-	let widthPercent = CGFloat(userLvl.truncatingRemainder(dividingBy: 1) * 100)
-	let width = lvlLineBack.viewWidth * widthPercent / 100
-	lvlLineFront.widthAnchor.constraint(equalToConstant: width).isActive = true
+    let widthPercent = CGFloat(userLvl.truncatingRemainder(dividingBy: 1) * 100)
+    let width = (UIScreen.main.bounds.width - 40) * widthPercent / 100
+//    let width = lvlLineBack.frame.width * widthPercent / 100
+    lvlLineFront.widthAnchor.constraint(equalToConstant: width).isActive = true
   }
 }
 
@@ -91,17 +92,17 @@ extension ProfileViewController {
     
     projectsInLastCursusSetup()
   }
-	
-	func setupSkillsTable() {
-		skillsTable.delegate = self
-		skillsTable.dataSource = self
-		skillsTable.register(UINib(nibName: identifierSkill, bundle: nil), forCellReuseIdentifier: identifierSkill)
-		
-		skillsTable.backgroundColor = UIColor(hexString: "#202026").withAlphaComponent(0.85)
-		skillsTable.separatorColor = UIColor(hexString: "#01A2A4")
-		skillsTable.separatorStyle = .singleLine
-		skillsTable.rowHeight = 44
-	}
+  
+  func setupSkillsTable() {
+    skillsTable.delegate = self
+    skillsTable.dataSource = self
+    skillsTable.register(UINib(nibName: identifierSkill, bundle: nil), forCellReuseIdentifier: identifierSkill)
+    
+    skillsTable.backgroundColor = UIColor(hexString: "#202026").withAlphaComponent(0.85)
+    skillsTable.separatorColor = UIColor(hexString: "#01A2A4")
+    skillsTable.separatorStyle = .singleLine
+    skillsTable.rowHeight = 44
+  }
 }
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
@@ -109,42 +110,44 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   func projectsInLastCursusSetup() {
     let id = user.projects_users[0].cursus_ids
     for project in user.projects_users {
-		if project.final_mark != nil && project.cursus_ids == id && project.project.parent_id == nil {
+      if project.final_mark != nil && project.cursus_ids == id && project.project.parent_id == nil {
         projectsInLastCursus.append(project)
       }
     }
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-	switch tableView {
-	case projectsTable:
-		return projectsInLastCursus.count
-	default:
-		let index = user.cursus_users.count - 1
-		return user.cursus_users[index].skills.count
-	}
+    switch tableView {
+    
+    case projectsTable:
+      return projectsInLastCursus.count
+      
+    default:
+      let index = user.cursus_users.count - 1
+      return user.cursus_users[index].skills.count
+    }
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-	switch tableView {
-	case projectsTable:
-		let cell = tableView.dequeueReusableCell(withIdentifier: identifierProject, for: indexPath) as! CustomProjectCell
-		let theProject = projectsInLastCursus[indexPath.row]
-		// TODO: status == "in_progress" find hierarchie
-		cell.setupStatus(status: theProject.status)
-		cell.setupFinalMark(value: theProject.final_mark)
-		cell.setupProjectName(value: theProject.project.name)
-		return cell
-	default:
-		let index = user.cursus_users.count - 1
-		let cell = tableView.dequeueReusableCell(withIdentifier: identifierSkill, for: indexPath) as! CustomSkillCell
-		// TODO: disable selection in .xib or just see in latest version
-		cell.selectionStyle = .none
-		let theSkill = user.cursus_users[index].skills[indexPath.row]
-		cell.setupSkillLvl(value: theSkill.level)
-		cell.setupSkillName(value: theSkill.name)
-		return cell
-	}
+    switch tableView {
+    
+    case projectsTable:
+      let cell = tableView.dequeueReusableCell(withIdentifier: identifierProject, for: indexPath) as! CustomProjectCell
+      let theProject = projectsInLastCursus[indexPath.row]
+      cell.setupStatus(status: theProject.validated)
+      cell.setupFinalMark(value: theProject.final_mark)
+      cell.setupProjectName(value: theProject.project.name)
+      return cell
+      
+    default:
+      let index = user.cursus_users.count - 1
+      let cell = tableView.dequeueReusableCell(withIdentifier: identifierSkill, for: indexPath) as! CustomSkillCell
+      cell.selectionStyle = .none
+      let theSkill = user.cursus_users[index].skills[indexPath.row]
+      cell.setupSkillLvl(value: theSkill.level)
+      cell.setupSkillName(value: theSkill.name)
+      return cell
+    }
   }
   
   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

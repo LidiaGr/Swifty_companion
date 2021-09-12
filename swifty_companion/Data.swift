@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct User: Decodable {
+struct User: Codable {
     var id:     Int
     var login:  String
     var displayname: String
@@ -21,31 +21,36 @@ struct User: Decodable {
     var campus: [Campus]
 }
 
-struct Cursus: Decodable {
+struct Cursus: Codable {
     var level: Double
     var skills: [Skill]
 }
 
-struct Skill: Decodable {
+struct Skill: Codable {
     var name: String
     var level: Double
 }
 
-struct Project: Decodable {
+struct Project: Codable {
     var final_mark: Int?
     var project: ProjectDetails
     var cursus_ids: [Int]
     var status: String
-	var validated: Bool?
+    var validated: Bool?
+  
+  enum CodingKeys: String, CodingKey {
+    case validated = "validated?"
+    case final_mark, project, cursus_ids, status
+  }
 }
 
-struct ProjectDetails: Decodable {
+struct ProjectDetails: Codable {
 	var id: Int
-    var name: String
+  var name: String
 	var slug: String
 	var parent_id: Int?
 }
 
-struct Campus: Decodable {
+struct Campus: Codable {
     var name: String
 }
