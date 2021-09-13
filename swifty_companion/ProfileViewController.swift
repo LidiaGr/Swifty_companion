@@ -74,7 +74,6 @@ extension ProfileViewController {
   func setupLvlLine() {
     let widthPercent = CGFloat(userLvl.truncatingRemainder(dividingBy: 1) * 100)
     let width = (UIScreen.main.bounds.width - 40) * widthPercent / 100
-//    let width = lvlLineBack.frame.width * widthPercent / 100
     lvlLineFront.widthAnchor.constraint(equalToConstant: width).isActive = true
   }
 }

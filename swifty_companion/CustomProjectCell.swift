@@ -40,7 +40,7 @@ final class CustomProjectCell: UITableViewCell {
     stat = status == true ? Status.success : Status.failure
     
     switch stat {
-    case .success: color = UIColor(hexString: "#5cb85c")
+    case .success: color = UIColor(hexString: "#39D88F")
     case .failure: color = UIColor(hexString: "#D8636F")
     }
   }

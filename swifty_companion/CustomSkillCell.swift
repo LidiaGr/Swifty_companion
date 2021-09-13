@@ -42,6 +42,6 @@ final class CustomSkillCell: UITableViewCell {
   private func initialSetup() {
     skillName.text = ""
     skillLvl.text = ""
-    [skillName, skillLvl].forEach { $0?.textColor = UIColor(hexString: "#5cb85c") }
+    [skillName, skillLvl].forEach { $0?.textColor = UIColor(hexString: "#39D88F") }
   }
 }

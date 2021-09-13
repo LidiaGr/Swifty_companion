@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class ApiConnection {
+  // TODO: save token in Keychain
     private var token = String()
     private let UID = "1dcd2fe1f58d430c8fc484b4ca8900cbcf3c7843c9ce879095592577e7973979"
     private let SECRET = "3ca74e73ede4504afa8ca14f54cb57823e16dfc397141c6978c7f1cb1387add7"
@@ -69,6 +70,7 @@ class ApiConnection {
             session.dataTask(with: request) { (data, response, error) in
                 if let err = error {
                     print(err)
+                  // TODO: show alert error when no internet or smth else
                     return
                 }
                 guard let response = response as? HTTPURLResponse,
