@@ -105,8 +105,19 @@ class ViewController: UIViewController {
     
     @objc func buttonPressed() {
         spinner.startAnimating()
+        buttonEnabled(value: false)
         apiConnection?.getTokenAndMakeRequest(username: textField.text?.lowercased() ?? "")
     }
+  
+  func buttonEnabled(value: Bool) {
+    if value == true {
+      button.isEnabled = true
+      button.alpha = 1
+    } else {
+      button.isEnabled = false
+      button.alpha = 0.5
+    }
+  }
 }
 
 extension ViewController : APIIntra42Delegate {
@@ -118,7 +129,8 @@ extension ViewController : APIIntra42Delegate {
             let secondVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
             secondVC.user = data
             self.navigationController?.pushViewController(secondVC, animated: true)
-            
+            self.buttonEnabled(value: true)
+          
             print(data)
         }
     }
@@ -131,6 +143,7 @@ extension ViewController : APIIntra42Delegate {
             }))
             self.present(alert, animated: true, completion: nil)
             self.spinner.stopAnimating()
+            self.buttonEnabled(value: true)
         }
     }
 }
