@@ -10,6 +10,8 @@ import UIKit
 class ProfileViewController: UIViewController {
   var user: User!
   
+  // MARK: - Private properties
+  
   @IBOutlet private weak var scrollView: UIScrollView!
   @IBOutlet private weak var contentView: UIView!
   
@@ -33,6 +35,8 @@ class ProfileViewController: UIViewController {
   private var projectsInLastCursus = [Project]()
   private var userLvl: Double = 0.0
   
+  // MARK: - Overriden
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -44,8 +48,10 @@ class ProfileViewController: UIViewController {
   }
 }
 
+// MARK: - Private methods
+
 extension ProfileViewController {
-  func displayProfileData() {
+  private func displayProfileData() {
     avatar.load(url: URL(string: user.image_url)!)
     avatar.layer.cornerRadius = avatar.frame.size.width / 2
     
@@ -67,7 +73,7 @@ extension ProfileViewController {
     setupLvlLine()
   }
   
-  func setupLvlLine() {
+  private func setupLvlLine() {
     let widthPercent = CGFloat(userLvl.truncatingRemainder(dividingBy: 1) * 100)
     let width = (UIScreen.main.bounds.width - 40) * widthPercent / 100
     lvlLineFront.widthAnchor.constraint(equalToConstant: width).isActive = true
@@ -75,7 +81,7 @@ extension ProfileViewController {
 }
 
 extension ProfileViewController {
-  func setupProjectsTable() {
+  private func setupProjectsTable() {
     projectsTable.delegate = self
     projectsTable.dataSource = self
     projectsTable.register(UINib(nibName: identifierProject, bundle: nil), forCellReuseIdentifier: identifierProject)
@@ -88,7 +94,7 @@ extension ProfileViewController {
     projectsInLastCursusSetup()
   }
   
-  func setupSkillsTable() {
+  private func setupSkillsTable() {
     skillsTable.delegate = self
     skillsTable.dataSource = self
     skillsTable.register(UINib(nibName: identifierSkill, bundle: nil), forCellReuseIdentifier: identifierSkill)
@@ -100,9 +106,11 @@ extension ProfileViewController {
   }
 }
 
+// MARK: - UITableViewDataSource, UITableViewDelegate
+
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   
-  func projectsInLastCursusSetup() {
+  private func projectsInLastCursusSetup() {
     let id = user.projects_users[0].cursus_ids
     for project in user.projects_users {
       if project.final_mark != nil && project.cursus_ids == id && project.project.parent_id == nil {

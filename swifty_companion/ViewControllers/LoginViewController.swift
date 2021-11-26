@@ -9,6 +9,8 @@ import UIKit
 import AuthenticationServices
 
 class LoginViewController: UIViewController {
+  // MARK: - States
+  
   private(set) var dataLoaded = false {
     willSet {
       if newValue != dataLoaded {
@@ -39,7 +41,7 @@ class LoginViewController: UIViewController {
   private let textField = TextField()
   private let logo = UIImageView(image: UIImage(named: "logo"))
   
-  let stackView: UIStackView = {
+  private let stackView: UIStackView = {
     let stack = UIStackView()
     stack.translatesAutoresizingMaskIntoConstraints = false
     stack.distribution = .fillProportionally
@@ -47,6 +49,8 @@ class LoginViewController: UIViewController {
     stack.spacing = 15
     return stack
   }()
+  
+  // MARK: - Overriden
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -74,36 +78,7 @@ class LoginViewController: UIViewController {
     present(alert, animated: true, completion: nil)
   }
   
-  private func setupLogo() {
-    view.addSubview(logo)
-    logo.translatesAutoresizingMaskIntoConstraints = false
-    
-    logo.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-    logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-  }
-  
-  private func setupSpinner() {
-    view.addSubview(spinner)
-    spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-  }
-  
-  private func setupLoginButton() {
-    loginButton.setTitle("Login", for: .normal)
-    loginButton.backgroundColor = UIColor(hexString: "#00babc")
-    loginButton.setTitleColor(UIColor.white, for: .normal)
-    loginButton.layer.cornerRadius = 5
-    loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
-    
-    view.addSubview(loginButton)
-    loginButton.translatesAutoresizingMaskIntoConstraints = false
-    loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    loginButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    loginButton.widthAnchor.constraint(equalToConstant: 300).isActive = true
-    loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-  }
-  
-  func buttonEnabled(button: UIButton, value: Bool) {
+  private func buttonEnabled(button: UIButton, value: Bool) {
     if value == true {
       button.isEnabled = true
       button.alpha = 1
@@ -112,54 +87,7 @@ class LoginViewController: UIViewController {
       button.alpha = 0.5
     }
   }
-  
-  private func setupSearch() {
-    setupStackView()
-    setupTextField()
-    setupSearchButton()
-  }
-  
-  func setupStackView() {
-    view.addSubview(stackView)
-    stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-    stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-    stackView.widthAnchor.constraint(equalToConstant: 300).isActive = true
-  }
-  
-  func setupTextField() {
-    textField
-      .attributedPlaceholder = NSAttributedString(string: "Enter username",
-                                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)])
-    textField.textAlignment = .left
-    textField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-    textField.layer.borderColor = UIColor(hexString: "#00babc").cgColor
-    textField.layer.borderWidth = 1
-    textField.layer.cornerRadius = 5
-    textField.textColor = UIColor.white
-    textField.borderStyle = .roundedRect
-    textField.autocorrectionType = UITextAutocorrectionType.no
-    textField.keyboardType = UIKeyboardType.default
-    textField.returnKeyType = UIReturnKeyType.done
-    textField.clearButtonMode = UITextField.ViewMode.whileEditing
-    textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-    textField.delegate = self
-    
-    textField.addTarget(self, action: #selector(searchButtonPressed), for: .editingDidEndOnExit)
-    
-    stackView.addArrangedSubview(textField)
-  }
-  
-  func setupSearchButton() {
-    searchButton.setTitle("Search", for: .normal)
-    searchButton.backgroundColor = UIColor(hexString: "#00babc")
-    searchButton.setTitleColor(UIColor.white, for: .normal)
-    searchButton.layer.cornerRadius = 5
-    searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
-    
-    stackView.addArrangedSubview(searchButton)
-  }
 }
-
 
 // MARK: - Networking
 
@@ -232,7 +160,7 @@ extension LoginViewController {
   }
   
   /// Get the user in case the tokens are already stored on this device
-  func appeared() {
+  private func appeared() {
     getAuthorizedUser()
   }
   
@@ -268,6 +196,8 @@ extension LoginViewController {
   }
 }
 
+// MARK: - ASWebAuthenticationPresentationContextProviding
+
 extension LoginViewController: ASWebAuthenticationPresentationContextProviding {
   func presentationAnchor(for session: ASWebAuthenticationSession)
   -> ASPresentationAnchor {
@@ -275,6 +205,8 @@ extension LoginViewController: ASWebAuthenticationPresentationContextProviding {
     return window ?? ASPresentationAnchor()
   }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension LoginViewController : UITextFieldDelegate {
   func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -291,3 +223,84 @@ extension LoginViewController : UITextFieldDelegate {
     return updatedText.count <= 20
   }
 }
+
+
+// MARK: - Setup methods
+
+extension LoginViewController {
+  private func setupLogo() {
+    view.addSubview(logo)
+    logo.translatesAutoresizingMaskIntoConstraints = false
+    
+    logo.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+    logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+  }
+  
+  private func setupSpinner() {
+    view.addSubview(spinner)
+    spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+  }
+  
+  private func setupLoginButton() {
+    loginButton.setTitle("Login", for: .normal)
+    loginButton.backgroundColor = UIColor(hexString: "#00babc")
+    loginButton.setTitleColor(UIColor.white, for: .normal)
+    loginButton.layer.cornerRadius = 5
+    loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
+    
+    view.addSubview(loginButton)
+    loginButton.translatesAutoresizingMaskIntoConstraints = false
+    loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    loginButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    loginButton.widthAnchor.constraint(equalToConstant: 300).isActive = true
+    loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+  }
+  
+  private func setupSearch() {
+    setupStackView()
+    setupTextField()
+    setupSearchButton()
+  }
+  
+  private func setupStackView() {
+    view.addSubview(stackView)
+    stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    stackView.widthAnchor.constraint(equalToConstant: 300).isActive = true
+  }
+  
+  private func setupTextField() {
+    textField
+      .attributedPlaceholder = NSAttributedString(string: "Enter username",
+                                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)])
+    textField.textAlignment = .left
+    textField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+    textField.layer.borderColor = UIColor(hexString: "#00babc").cgColor
+    textField.layer.borderWidth = 1
+    textField.layer.cornerRadius = 5
+    textField.textColor = UIColor.white
+    textField.borderStyle = .roundedRect
+    textField.autocorrectionType = UITextAutocorrectionType.no
+    textField.keyboardType = UIKeyboardType.default
+    textField.returnKeyType = UIReturnKeyType.done
+    textField.clearButtonMode = UITextField.ViewMode.whileEditing
+    textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+    textField.delegate = self
+    
+    textField.addTarget(self, action: #selector(searchButtonPressed), for: .editingDidEndOnExit)
+    
+    stackView.addArrangedSubview(textField)
+  }
+  
+  private func setupSearchButton() {
+    searchButton.setTitle("Search", for: .normal)
+    searchButton.backgroundColor = UIColor(hexString: "#00babc")
+    searchButton.setTitleColor(UIColor.white, for: .normal)
+    searchButton.layer.cornerRadius = 5
+    searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+    
+    stackView.addArrangedSubview(searchButton)
+  }
+}
+

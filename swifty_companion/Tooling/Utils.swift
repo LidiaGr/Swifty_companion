@@ -28,6 +28,20 @@ extension UIColor {
     }
 }
 
+extension UIImageView {
+    func load(url: URL) {
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.image = image
+                    }
+                }
+            }
+        }
+    }
+}
+
 class TextField: UITextField {
 
     let padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 5)
@@ -63,17 +77,3 @@ var spinner: UIActivityIndicatorView! = {
   loginSpinner.hidesWhenStopped = true
   return loginSpinner
 }()
-
-extension UIImageView {
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
-        }
-    }
-}
