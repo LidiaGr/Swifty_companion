@@ -181,6 +181,11 @@ extension LoginViewController {
   @objc private func loginButtonPressed() {
     loginButton.isHidden = true
     
+    if NetworkRequest.accessToken != nil {
+      appeared()
+      return
+    }
+    
     guard let signInURL =
             NetworkRequest.RequestType.signIn.networkRequest()?.url
     else {
@@ -222,7 +227,7 @@ extension LoginViewController {
         
       }
     authenticationSession.presentationContextProvider = self
-    //      authenticationSession.prefersEphemeralWebBrowserSession = true
+    authenticationSession.prefersEphemeralWebBrowserSession = true
     
     
     if !authenticationSession.start() {
@@ -231,7 +236,7 @@ extension LoginViewController {
   }
   
   func appeared() {
-    // Try to get the user in case the tokens are already stored on this device
+    // Get the user in case the tokens are already stored on this device
     getAuthorizedUser()
   }
   
