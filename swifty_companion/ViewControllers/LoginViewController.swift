@@ -48,14 +48,6 @@ class LoginViewController: UIViewController {
     return stack
   }()
   
-  private var spinner: UIActivityIndicatorView! = {
-    let loginSpinner = UIActivityIndicatorView(style: .large)
-    loginSpinner.color = .white
-    loginSpinner.translatesAutoresizingMaskIntoConstraints = false
-    loginSpinner.hidesWhenStopped = true
-    return loginSpinner
-  }()
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
@@ -239,8 +231,8 @@ extension LoginViewController {
     }
   }
   
+  /// Get the user in case the tokens are already stored on this device
   func appeared() {
-    // Get the user in case the tokens are already stored on this device
     getAuthorizedUser()
   }
   

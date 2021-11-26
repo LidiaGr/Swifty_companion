@@ -56,6 +56,14 @@ class TextField: UITextField {
     }
 }
 
+var spinner: UIActivityIndicatorView! = {
+  let loginSpinner = UIActivityIndicatorView(style: .large)
+  loginSpinner.color = .white
+  loginSpinner.translatesAutoresizingMaskIntoConstraints = false
+  loginSpinner.hidesWhenStopped = true
+  return loginSpinner
+}()
+
 extension UIImageView {
     func load(url: URL) {
         DispatchQueue.global().async { [weak self] in

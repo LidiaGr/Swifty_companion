@@ -36,10 +36,6 @@ class ProfileViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    navigationController?.setNavigationBarHidden(false, animated: false)
-    self.title = "Profile"
-    navigationController?.navigationBar.tintColor = UIColor(hexString: "#009294")
-    
     view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
     
     displayProfileData()
