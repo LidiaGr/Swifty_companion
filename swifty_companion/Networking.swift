@@ -19,6 +19,41 @@ class ApiConnection {
         self.delegate = apiDelegate
     }
     
+  func getToken() {
+      if token.isEmpty {
+          let url = URL(string: "https://api.intra.42.fr/oauth/token".addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)!
+          let data = ["grant_type":"client_credentials", "client_id":"\(UID)", "client_secret":"\(SECRET)"]
+          
+          var request = URLRequest(url: url)
+          request.httpMethod = "POST"
+          request.httpBody = try? JSONSerialization.data(withJSONObject: data)
+          request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+          
+          let session = URLSession.shared
+          session.dataTask(with: request) { (data, response, error) in
+              if let err = error {
+                  print(err)
+                  return
+              }
+              guard let response = response as? HTTPURLResponse,
+                    (200...299).contains(response.statusCode) else {
+                  print(response!)
+                  return
+              }
+              if let recievedData = data {
+                  do {
+                      let json = try JSONSerialization.jsonObject(with: recievedData) as! Dictionary<String, AnyObject>
+                      guard let currentToken = json["access_token"] as? String else { return }
+                      self.token = currentToken
+                      print("Token successfully received")
+                  } catch let err {
+                      print(err)
+                  }
+              }
+          }.resume()
+      }
+  }
+  
     func getTokenAndMakeRequest(username: String) {
         if token.isEmpty {
             let url = URL(string: "https://api.intra.42.fr/oauth/token".addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)!
