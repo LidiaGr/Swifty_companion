@@ -9,17 +9,28 @@ import UIKit
 import AuthenticationServices
 
 class LoginViewController: UIViewController {
+  private(set) var dataLoaded = false {
+    willSet {
+      if newValue != dataLoaded {
+        stackView.arrangedSubviews.forEach { $0.isHidden = false }
+      }
+    }
+  }
+  
   private(set) var isLoading = false {
     willSet {
       if newValue == true {
         spinner.startAnimating()
-        buttonEnabled(value: false)
+        loginButton.isHidden = true
+        buttonEnabled(button: searchButton, value: false)
       } else {
         spinner.stopAnimating()
-        buttonEnabled(value: true)
+        buttonEnabled(button: searchButton, value: true)
       }
     }
   }
+  
+  private(set) var tokenExpired = false
   
   // MARK: - Private properties
   
@@ -52,14 +63,18 @@ class LoginViewController: UIViewController {
     setupLogo()
     setupLoginButton()
     setupSpinner()
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    navigationController?.setNavigationBarHidden(true, animated: false)
+    setupStackView()
+    setupTextField()
+    setupSearchButton()
+    
+    resetToEmptyState()
   }
   
   // MARK: - Private methods
+  
+  private func resetToEmptyState() {
+    stackView.arrangedSubviews.forEach { $0.isHidden = true }
+  }
   
   private func presentAlert(_ title: String, message: String) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -94,16 +109,15 @@ class LoginViewController: UIViewController {
     loginButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     loginButton.widthAnchor.constraint(equalToConstant: 300).isActive = true
     loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-    
   }
   
-  func buttonEnabled(value: Bool) {
+  func buttonEnabled(button: UIButton, value: Bool) {
     if value == true {
-      loginButton.isEnabled = true
-      loginButton.alpha = 1
+      button.isEnabled = true
+      button.alpha = 1
     } else {
-      loginButton.isEnabled = false
-      loginButton.alpha = 0.5
+      button.isEnabled = false
+      button.alpha = 0.5
     }
   }
   
@@ -172,23 +186,19 @@ extension LoginViewController {
           self?.presentUserProfile(user: response.object)
         case .failure(let error):
           self?.presentAlert(username, message: "User not found")
-          print("Failed to get user, or there is no valid/active session: \(error.localizedDescription)")
+          print("Failed to find user, or there is no valid/active session: \(error.localizedDescription)")
         }
         self?.isLoading = false
       }
   }
   
   @objc private func loginButtonPressed() {
-    loginButton.isHidden = true
-    
-    if NetworkRequest.accessToken != nil {
+    if NetworkRequest.accessToken != nil && tokenExpired == false {
       appeared()
       return
     }
     
-    guard let signInURL =
-            NetworkRequest.RequestType.signIn.networkRequest()?.url
-    else {
+    guard let signInURL = NetworkRequest.RequestType.signIn.networkRequest()?.url else {
       print("Could not create the sign in URL .")
       return
     }
@@ -197,20 +207,15 @@ extension LoginViewController {
     let authenticationSession = ASWebAuthenticationSession(
       url: signInURL,
       callbackURLScheme: callbackURLScheme) { [weak self] callbackURL, error in
-        // 1
         guard
           error == nil,
           let callbackURL = callbackURL,
-          // 2
           let queryItems = URLComponents(string: callbackURL.absoluteString)?
             .queryItems,
-          // 3
           let code = queryItems.first(where: { $0.name == "code" })?.value,
-          // 4
           let networkRequest =
             NetworkRequest.RequestType.codeExchange(code: code).networkRequest()
         else {
-          // 5
           print("An error occurred when attempting to sign in.")
           return
         }
@@ -224,11 +229,10 @@ extension LoginViewController {
             print("Failed to exchange access code for tokens: \(error)")
           }
         }
-        
       }
+    
     authenticationSession.presentationContextProvider = self
     authenticationSession.prefersEphemeralWebBrowserSession = true
-    
     
     if !authenticationSession.start() {
       print("Failed to start ASWebAuthenticationSession")
@@ -250,10 +254,12 @@ extension LoginViewController {
       .start(responseType: User.self) { [weak self] result in
         switch result {
         case .success(let response):
+          self?.tokenExpired = false
           self?.presentUserProfile(user: response.object)
-          self?.setupSearch()
         case .failure(let error):
+          self?.tokenExpired = true
           self?.loginButton.isHidden = false
+          self?.loginButton.setTitle("Retry", for: .normal)
           print("Failed to get user, or there is no valid/active session: \(error.localizedDescription)")
         }
         self?.isLoading = false
@@ -264,7 +270,9 @@ extension LoginViewController {
     let storyboard = UIStoryboard(name: "ProfileViewController", bundle: nil)
     let vc = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
     vc.user = user
-    self.present(vc, animated: true, completion: nil)
+    self.present(vc, animated: true) { [weak self] in
+      self?.dataLoaded = true
+    }
   }
 }
 
