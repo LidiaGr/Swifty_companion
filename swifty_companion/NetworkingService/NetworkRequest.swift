@@ -47,8 +47,8 @@ struct NetworkRequest {
 
   enum RequestType: Equatable {
     case codeExchange(code: String)
-//    case getRepos
-    case getUser
+    case findUser(username: String)
+    case getAuthorizedUser
     case signIn
 
     func networkRequest() -> NetworkRequest? {
@@ -62,9 +62,9 @@ struct NetworkRequest {
       switch self {
       case .codeExchange:
         return .post
-//      case .getRepos:
-//        return .get
-      case .getUser:
+      case .findUser:
+        return .get
+      case .getAuthorizedUser:
         return .get
       case .signIn:
         return .get
@@ -82,15 +82,9 @@ struct NetworkRequest {
           URLQueryItem(name: "redirect_uri", value: Constants.redirectURI)
         ]
         return urlComponents(host: Constants.apiHost , path: Constants.tokenPath , queryItems: queryItems).url
-//      case .getRepos:
-//        guard
-//          let username = NetworkRequest.username,
-//          !username.isEmpty
-//        else {
-//          return nil
-//        }
-//        return urlComponents(path: "/users/\(username)/repos", queryItems: nil).url
-      case .getUser:
+      case .findUser(let username):
+        return urlComponents(path: "/v2/users/\(username)", queryItems: nil).url
+      case .getAuthorizedUser:
         return urlComponents(path: "/v2/me", queryItems: nil).url
       case .signIn:
         let queryItems = [
