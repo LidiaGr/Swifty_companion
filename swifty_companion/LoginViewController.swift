@@ -139,6 +139,7 @@ class LoginViewController: UIViewController {
           
       }
       authenticationSession.presentationContextProvider = self
+//      authenticationSession.prefersEphemeralWebBrowserSession = true
       
       
       if !authenticationSession.start() {
@@ -161,39 +162,13 @@ class LoginViewController: UIViewController {
         .start(responseType: User.self) { [weak self] result in
           switch result {
           case .success:
-            print("success") // перейти на экран поиска или на свой
+            self?.spinner.stopAnimating()
+            let vc = ViewController()
+            self?.navigationController?.pushViewController(vc, animated: false)
           case .failure(let error):
             print("Failed to get user, or there is no valid/active session: \(error.localizedDescription)")
           }
           self?.isLoading = false
-        }
-    }
-}
-
-extension LoginViewController : APIIntra42Delegate {
-    func processData(data: User) {
-        DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            
-            let storyboard = UIStoryboard(name: "ProfileViewController", bundle: nil)
-            let secondVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
-            secondVC.user = data
-            self.navigationController?.pushViewController(secondVC, animated: true)
-            self.buttonEnabled(value: true)
-          
-            print(data)
-        }
-    }
-    
-    func errorOccured(error: NSError) {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Error", message: "User '\(error.userInfo["username"] ?? "")' not found", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-                NSLog(error.localizedDescription)
-            }))
-            self.present(alert, animated: true, completion: nil)
-            self.spinner.stopAnimating()
-            self.buttonEnabled(value: true)
         }
     }
 }

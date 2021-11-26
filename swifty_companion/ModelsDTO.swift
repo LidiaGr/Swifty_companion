@@ -54,3 +54,12 @@ struct ProjectDetails: Codable {
 struct Campus: Codable {
     var name: String
 }
+
+struct Token: Codable {
+  var access_token: String
+  var token_type: StringLiteralType
+  var expires_in: Int
+  var refresh_token: String
+  var scope: String
+  var created_at: Int
+}

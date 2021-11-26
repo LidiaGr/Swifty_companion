@@ -160,19 +160,11 @@ struct NetworkRequest {
         return
       }
 
-      if T.self == String.self, let responseString = String(data: data, encoding: .utf8) {
-        let components = responseString.components(separatedBy: "&")
-        var dictionary: [String: String] = [:]
-        for component in components {
-          let itemComponents = component.components(separatedBy: "=")
-          if let key = itemComponents.first, let value = itemComponents.last {
-            dictionary[key] = value
-          }
-        }
+      if T.self == String.self {
+        let token = try? JSONDecoder().decode(Token.self, from: data)
         DispatchQueue.main.async {
-          NetworkRequest.accessToken = dictionary["access_token"]
-          NetworkRequest.refreshToken = dictionary["refresh_token"]
-          // swiftlint:disable:next force_cast
+          NetworkRequest.accessToken = token?.access_token
+          NetworkRequest.refreshToken = token?.refresh_token
           completionHandler(.success((response, "Success" as! T)))
         }
         return
