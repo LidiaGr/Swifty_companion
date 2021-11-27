@@ -143,10 +143,7 @@ struct NetworkRequest {
         }
         return
       }
-      guard
-        error == nil,
-        let data = data
-      else {
+      guard error == nil, let data = data else {
         DispatchQueue.main.async {
           let error = error ?? NetworkRequest.RequestError.otherError
           completionHandler(.failure(error))

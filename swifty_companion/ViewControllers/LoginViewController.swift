@@ -127,8 +127,7 @@ extension LoginViewController {
     let authenticationSession = ASWebAuthenticationSession(
       url: signInURL,
       callbackURLScheme: callbackURLScheme) { [weak self] callbackURL, error in
-        guard
-          error == nil,
+        guard error == nil,
           let callbackURL = callbackURL,
           let queryItems = URLComponents(string: callbackURL.absoluteString)?
             .queryItems,
