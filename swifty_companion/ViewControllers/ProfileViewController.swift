@@ -111,10 +111,12 @@ extension ProfileViewController {
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
   
   private func projectsInLastCursusSetup() {
-    let id = user.projects_users[0].cursus_ids
-    for project in user.projects_users {
-      if project.final_mark != nil && project.cursus_ids == id && project.project.parent_id == nil {
-        projectsInLastCursus.append(project)
+    if !user.projects_users.isEmpty {
+      let id = user.projects_users[0].cursus_ids
+      for project in user.projects_users {
+        if project.final_mark != nil && project.cursus_ids == id && project.project.parent_id == nil {
+          projectsInLastCursus.append(project)
+        }
       }
     }
   }
