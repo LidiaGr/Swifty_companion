@@ -16,6 +16,7 @@ class ProfileViewController: UIViewController {
   @IBOutlet private weak var contentView: UIView!
   
   @IBOutlet private weak var avatar: UIImageView!
+  @IBOutlet private weak var avatarSpinner: UIActivityIndicatorView!
   @IBOutlet private weak var nameLabel: UILabel!
   @IBOutlet private weak var wallet: UILabel!
   @IBOutlet private weak var evalPoints: UILabel!
@@ -52,6 +53,7 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController {
   private func displayProfileData() {
+    avatarSpinner.startAnimating()
     avatar.load(url: URL(string: user.image.link)!)
     avatar.layer.cornerRadius = avatar.frame.size.width / 2
     
