@@ -76,8 +76,8 @@ struct NetworkRequest {
       case .codeExchange(let code):
         let queryItems = [
           URLQueryItem(name: "grant_type", value: "authorization_code"),
-          URLQueryItem(name: "client_id", value: NetworkRequest.clientID),
-          URLQueryItem(name: "client_secret", value: NetworkRequest.clientSecret),
+          URLQueryItem(name: "client_id", value: (Bundle.main.object(forInfoDictionaryKey: "API_UID") as? String)),
+          URLQueryItem(name: "client_secret", value: Bundle.main.object(forInfoDictionaryKey: "API_SECRET") as? String),
           URLQueryItem(name: "code", value: code),
           URLQueryItem(name: "redirect_uri", value: Constants.redirectURI)
         ]
@@ -88,7 +88,7 @@ struct NetworkRequest {
         return urlComponents(path: "/v2/me", queryItems: nil).url
       case .signIn:
         let queryItems = [
-          URLQueryItem(name: "client_id", value: NetworkRequest.clientID),
+          URLQueryItem(name: "client_id", value: Bundle.main.object(forInfoDictionaryKey: "API_UID") as? String),
           URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
           URLQueryItem(name: "scope", value: Constants.scope),
           URLQueryItem(name: "response_type", value: "code")
@@ -115,8 +115,6 @@ struct NetworkRequest {
 
   // MARK: Private Constants
   static let callbackURLScheme = Constants.callbackURL
-  static let clientID = Constants.clientId
-  static let clientSecret = Constants.clientSecret
 
   // MARK: Properties
   var method: HTTPMethod
@@ -179,8 +177,6 @@ struct NetworkRequest {
 
 // MARK: - Constants
 private enum Constants {
-    static let clientId = "1dcd2fe1f58d430c8fc484b4ca8900cbcf3c7843c9ce879095592577e7973979"
-    static let clientSecret = "3ca74e73ede4504afa8ca14f54cb57823e16dfc397141c6978c7f1cb1387add7"
     static let tokenPath = "/oauth/token"
     static let authPath = "/oauth/authorize"
     static let host = "intra.42.fr"

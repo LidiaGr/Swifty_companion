@@ -52,7 +52,7 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController {
   private func displayProfileData() {
-    avatar.load(url: URL(string: user.image_url)!)
+    avatar.load(url: URL(string: user.image.link)!)
     avatar.layer.cornerRadius = avatar.frame.size.width / 2
     
     nameLabel.text = user.displayname

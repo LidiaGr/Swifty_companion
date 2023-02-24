@@ -271,8 +271,10 @@ extension LoginViewController {
   
   private func setupTextField() {
     textField
-      .attributedPlaceholder = NSAttributedString(string: "Enter username",
-                                                  attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)])
+      .attributedPlaceholder = NSAttributedString(
+        string: "Enter username",
+        attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.3)]
+      )
     textField.textAlignment = .left
     textField.backgroundColor = UIColor.black.withAlphaComponent(0.2)
     textField.layer.borderColor = UIColor(hexString: "#00babc").cgColor
