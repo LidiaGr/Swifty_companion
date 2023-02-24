@@ -8,6 +8,14 @@ DerivedData
 # Bundle
 .bundle/
 
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## User settings
+xcuserdata/
+
 ## Xcode Patch
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
