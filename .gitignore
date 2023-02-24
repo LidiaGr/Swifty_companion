@@ -5,7 +5,7 @@
 DerivedData
 *.zip
 
-# Bundle
+## Bundle
 .bundle/
 
 ## App packaging
