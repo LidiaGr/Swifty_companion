@@ -360,6 +360,8 @@
 		02F10AE3268362CA00E38018 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				API_SECRET = "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";
+				API_UID = "u-s4t2ud-e12a1ccdce215a3da267ebe111d92d989916b9ca69e020b955b9c8edd62fb1ce";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -379,6 +381,8 @@
 		02F10AE4268362CA00E38018 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				API_SECRET = "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";
+				API_UID = "u-s4t2ud-e12a1ccdce215a3da267ebe111d92d989916b9ca69e020b955b9c8edd62fb1ce";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
